@@ -2,7 +2,10 @@
 import logging as log
 from flask import Flask, render_template, request
 from pdf2image import convert_from_bytes
+
 app = Flask(__name__)
+
+log.basicConfig(filename='logs/app.log', level=log.INFO)
 
 
 @app.route("/")
@@ -23,4 +26,7 @@ def pdf2image():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    try:
+        app.run(debug=True)
+    except Exception as err:
+        log.critical(err)
