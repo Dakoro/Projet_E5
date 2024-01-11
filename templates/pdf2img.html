@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Conversion{% endblock title %}
+
+{% block content %}
+    <form action="/pdf2img" method="post" enctype = "multipart/form-data">
+        <label for="pdf_file"></label>
+        <input type="file" name="pdf_file" id="pdf_file">
+        <button type="submit">Send File</button>
+    </form>
+{% endblock content %}
