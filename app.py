@@ -1,4 +1,3 @@
-
 import logging as log
 from flask import Flask, render_template, request
 from pdf2image import convert_from_bytes
@@ -21,7 +20,7 @@ def pdf2image():
         try:
             _ = convert_from_bytes(data, dpi=300)
         except Exception as e:
-            print(log.error(e))
+            log.error(e)
     return render_template('pdf2img.html')
 
 
