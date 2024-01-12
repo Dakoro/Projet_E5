@@ -1,7 +1,8 @@
 import logging as log
+import pyvips
+import matplotlib.pyplot as plt
 from flask import Flask, render_template, request
-from pdf2image import convert_from_bytes
-
+from solution import vips_to_numpy
 app = Flask(__name__)
 
 log.basicConfig(filename='logs/app.log', level=log.INFO)
@@ -18,7 +19,16 @@ def pdf2image():
         pdf_file = request.files['pdf_file']
         data = pdf_file.read()
         try:
-            _ = convert_from_bytes(data, dpi=300)
+            pdf = pyvips.Image.new_from_buffer(data, "", dpi=300)
+            n_pages = pdf.get_n_pages()
+            print(pdf)
+            print(n_pages)
+            for i in range(n_pages):
+                vips_img = pyvips.Image.new_from_buffer(data, "", dpi=300, page=i)
+                img_arr = vips_to_numpy(vips_img)
+                plt.imshow(img_arr)
+                plt.show()
+            # _ = convert_from_bytes(data, dpi=300)
         except Exception as e:
             log.error(e)
     return render_template('pdf2img.html')
