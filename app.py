@@ -19,16 +19,15 @@ def pdf2image():
         pdf_file = request.files['pdf_file']
         data = pdf_file.read()
         try:
+            # pdf = convert_from_bytes(data, dpi=300) # incomment to produce the bug
+            # the following block correct the pdf2image bug
             pdf = pyvips.Image.new_from_buffer(data, "", dpi=300)
             n_pages = pdf.get_n_pages()
-            print(pdf)
-            print(n_pages)
             for i in range(n_pages):
                 vips_img = pyvips.Image.new_from_buffer(data, "", dpi=300, page=i)
                 img_arr = vips_to_numpy(vips_img)
                 plt.imshow(img_arr)
                 plt.show()
-            # _ = convert_from_bytes(data, dpi=300)
         except Exception as e:
             log.error(e)
     return render_template('pdf2img.html')
